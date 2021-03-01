@@ -1,4 +1,3 @@
-from gensim.models import Word2Vec
 import pandas as pd
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.model_selection import train_test_split
@@ -7,12 +6,14 @@ import numpy as np
 from sklearn.utils import resample
 from nltk.stem import WordNetLemmatizer
 import string
-import nltk
-nltk.download('wordnet')
+import os
+#import nltk
+#nltk.download('wordnet')
 
-def get_data(X, y):
-    X = pd.read_csv('../raw_data/clean_sentiment_data/X_train')
-    y = pd.read_csv('../raw_data/clean_sentiment_data/y_train')
+def get_data():
+    data_path = os.path.dirname(os.path.dirname(__file__))
+    X = pd.read_csv(os.path.join(data_path, 'raw_data', 'clean_sentiment_data', 'X_train'))
+    y = pd.read_csv(os.path.join(data_path, 'raw_data', 'clean_sentiment_data', 'y_train'))
     X = X['Phrase']
     y = y['Answer.sentiment']
     return X, y
@@ -38,7 +39,7 @@ def convert_sentences(X):
 def tokenize(sentences, word_to_id):
     return [[word_to_id[_] for _ in s if _ in word_to_id] for s in sentences]
 
-def clean_data(X):
+def clean_data(X, y):
     X = X.apply(remove_punctuation)
     X = X.apply(lowercase)
     X = X.apply(lemma)
@@ -60,4 +61,4 @@ def clean_data(X):
     X_token_test = tokenize(X_test, word_to_id)
     X_train_pad = pad_sequences(X_token_train, dtype='float32', padding='post', value=0, maxlen=150)
     X_test_pad = pad_sequences(X_token_test, dtype='float32', padding='post', value=0, maxlen=150)
-    return X_train_pad, X_test_pad
+    return X_train_pad, X_test_pad, y_train, y_test, vocab_size
