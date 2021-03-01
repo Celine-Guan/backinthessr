@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backinthessr.trainer import Trainer
 
 app = FastAPI()
+
+model = load_model()
 
 app.add_middleware(
     CORSMiddleware,
@@ -11,6 +14,11 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-@app.get("/")
-def index():
-    return {"greeting": "Hello world"}
+@app.get("/predict")
+def predict_sentiment():
+    data = {'Phrase' : text}
+    X_pred = pd.DataFrame(data=data)
+
+    y = train
+    result = model.predict(X_pred)
+    return { 'result' : model.predict()}
