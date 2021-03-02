@@ -33,32 +33,37 @@ def lemma(text):
     #lemmatized_string = " ".join()
     return lemmatized
 
-def convert_sentences(X):
+def split_sentences(X):
     return [sentence.split(' ') for sentence in X]
 
 def tokenize(sentences, word_to_id):
     return [[word_to_id[_] for _ in s if _ in word_to_id] for s in sentences]
 
-def clean_data(X, y):
+def clean_data(X):
     X = X.apply(remove_punctuation)
     X = X.apply(lowercase)
     X = X.apply(lemma)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
-    arr = X_train.to_numpy()
-    arr_2 =X_test.to_numpy()
-    X_train = convert_sentences(arr)
-    X_test = convert_sentences(arr_2)
-    word_to_id = {}
-    iter_ = 1
-    for sentence in X_train:
-        for word in sentence:
-            if word in word_to_id:
-                continue
-            word_to_id[word] = iter_
-            iter_ += 1
-    vocab_size = len(word_to_id)
-    X_token_train = tokenize(X_train, word_to_id)
-    X_token_test = tokenize(X_test, word_to_id)
-    X_train_pad = pad_sequences(X_token_train, dtype='float32', padding='post', value=0, maxlen=150)
-    X_test_pad = pad_sequences(X_token_test, dtype='float32', padding='post', value=0, maxlen=150)
-    return X_train_pad, X_test_pad, y_train, y_test, vocab_size
+    arr = X.to_numpy()
+    X = split_sentences(arr)
+    return X
+    
+class Vocabulary():
+
+    def __init__(self, X):
+        self.X = X
+
+    def fit(self):
+        word_to_id = {}
+        iter_ = 1
+        for sentence in X:
+            for word in sentence:
+                if word in word_to_id:
+                    continue
+                word_to_id[word] = iter_
+                iter_ += 1
+        vocab_size = len(word_to_id)
+        return word_to_id, vocab_size
+
+    def transform(self):
+        X_token_train = tokenize(X_train, word_to_id)
+        X_train_pad = pad_sequences(X_token_train, dtype='float32', padding='post', value=0, maxlen=150)
