@@ -24,7 +24,7 @@ def train_model(X_train_pad, y_train, vocab_size):
     model.compile(loss='mse',
                 optimizer='rmsprop', 
                 metrics=['mae'])
-    model.fit(X_train_pad, y_train, validation_split=0.3, epochs=50, batch_size=16, callbacks=[es])
+    model.fit(X_train_pad, y_train, validation_split=0.3, epochs=1, batch_size=16, callbacks=[es])
     return model
 
 def evaluate(model, X_test_pad, y_test):

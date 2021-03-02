@@ -23,9 +23,8 @@ def remove_punctuation(text):
         text = text.replace(punctuation, ' ') 
     return text
 
-def lowercase (text): 
-    lowercased = text.lower() 
-    return lowercased
+def lowercase (text):  
+    return text.lower()
 
 def lemma(text):
     lemmatizer = WordNetLemmatizer() # Initiate lemmatizer
@@ -49,21 +48,23 @@ def clean_data(X):
     
 class Vocabulary():
 
-    def __init__(self, X):
-        self.X = X
+    def __init__(self):
+        self.word_to_id = None
+        self.vocab_size = None
 
-    def fit(self):
-        word_to_id = {}
+    def fit(self, X):
+        self.word_to_id = {}
         iter_ = 1
         for sentence in X:
             for word in sentence:
-                if word in word_to_id:
+                if word in self.word_to_id:
                     continue
-                word_to_id[word] = iter_
+                self.word_to_id[word] = iter_
                 iter_ += 1
-        vocab_size = len(word_to_id)
-        return word_to_id, vocab_size
+        self.vocab_size = len(self.word_to_id)
+        return self
 
-    def transform(self):
-        X_token_train = tokenize(X_train, word_to_id)
-        X_train_pad = pad_sequences(X_token_train, dtype='float32', padding='post', value=0, maxlen=150)
+    def transform(self, X):
+        X_token_train = tokenize(X, self.word_to_id)
+        X_pad = pad_sequences(X_token_train, dtype='float32', padding='post', value=0, maxlen=150)
+        return X_pad
