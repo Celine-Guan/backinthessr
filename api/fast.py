@@ -7,6 +7,7 @@ from backinthessr.clean_data2 import remove_punctuation, lowercase, lemma, split
 import joblib
 import pandas as pd
 import tensorflow as tf
+import nltk
 
 app = FastAPI()
 
@@ -17,6 +18,8 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+# nltk
+# nltk.download('wordnet')
 
 @app.get("/predict")
 def predict_sentiment(text):

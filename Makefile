@@ -67,62 +67,19 @@ run_api:
 	uvicorn api.fast:app --reload 
 
 # ----------------------------------
-#      	UPLOADING TO GCP
+#      	DOCKER DEPLOYMENT
 # ----------------------------------
 
-### GCP configuration - - - - - - - - - - - - - - - - - - -
+GCP_PROJECT_ID=wagon-corentin-305109
+DOCKER_IMAGE_NAME=backinthessr-test-01
+GCR_MULTI_REGION=eu.gcr.io
+GCR_REGION=europe-west1
 
-# /!\ you should fill these according to your account
+docker_build:
+	docker build --network=host -t ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} .
 
-### GCP Project - - - - - - - - - - - - - - - - - - - - - -
+docker_run:
+	docker run -e PORT=8000 -p 8000:8000 ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}
 
-# not required here
-
-### GCP Storage - - - - - - - - - - - - - - - - - - - - - -
-
-BUCKET_NAME=corentingaret-backinthessr-01
-
-##### Data  - - - - - - - - - - - - - - - - - - - - - - - -
-
-# not required here
-
-##### Training  - - - - - - - - - - - - - - - - - - - - - -
-
-# will store the packages uploaded to GCP for the training
-BUCKET_TRAINING_FOLDER = 'trainings'
-
-##### Model - - - - - - - - - - - - - - - - - - - - - - - -
-
-# not required here
-
-### GCP AI Platform - - - - - - - - - - - - - - - - - - - -
-
-##### Machine configuration - - - - - - - - - - - - - - - -
-
-REGION=europe-west1
-
-PYTHON_VERSION=3.7
-FRAMEWORK=scikit-learn
-RUNTIME_VERSION=1.15
-
-##### Package params  - - - - - - - - - - - - - - - - - - -
-
-PACKAGE_NAME=TaxiFareModel
-FILENAME=trainer
-
-##### Job - - - - - - - - - - - - - - - - - - - - - - - - -
-
-JOB_NAME=taxi_fare_training_pipeline_$(shell date +'%Y%m%d_%H%M%S')
-
-run_locally:
-	@python -m ${PACKAGE_NAME}.${FILENAME}
-
-gcp_submit_training:
-	gcloud ai-platform jobs submit training ${JOB_NAME} \
-		--job-dir gs://${BUCKET_NAME}/${BUCKET_TRAINING_FOLDER} \
-		--package-path ${PACKAGE_NAME} \
-		--module-name ${PACKAGE_NAME}.${FILENAME} \
-		--python-version=${PYTHON_VERSION} \
-		--runtime-version=${RUNTIME_VERSION} \
-		--region ${REGION} \
-		--stream-logs
+docker_push:
+	docker push ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}
