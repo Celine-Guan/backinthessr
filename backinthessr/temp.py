@@ -13,11 +13,8 @@ from nltk.stem import WordNetLemmatizer
 import string
 from tensorflow import keras
 from tensorflow.keras.layers import SpatialDropout2D
-import seaborn as sns
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import MaxPooling1D
-import nltk
-nltk.download('wordnet')
 
 word_to_id = {}
 iter_ = 1
