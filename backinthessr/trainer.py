@@ -23,8 +23,8 @@ class Trainer():
         return model, voc
     
     def save(self, model, voc):
-        # model.save('model.h5')
-        # joblib.dump(voc, 'vocabulary.joblib')
+        model.save('model.h5')
+        joblib.dump(voc, 'vocabulary.joblib')
         
         # with open("model.dill", "wb") as f:
             # dill.dump(model, f)
