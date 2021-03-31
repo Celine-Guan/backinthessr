@@ -1,10 +1,10 @@
-# Data analysis
-- Document here the project: backinthessr
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+## Recognizing human sentiment from audio and text recordings ##
 
-Please document the project the better you can.
+# Data analysis
+- **Description**: We analyzed both audio recordings and text transcripts to predict the sentiment behind a person’ sentence. Our intuition was that combining two models with two different sources, using multi-modal learning, could improve our performance.
+- **Data Source**: a data set from Carnegie Melon University called [CMU-MOSEI](http://multicomp.cs.cmu.edu/resources/cmu-mosei-dataset/) which is the largest dataset of sentence level sentiment analysis and emotion recognition in online videos. It contains more than 65 hours of annotated video from more than 1.000 speakers and 250 topics.
+The data was divided between segments of variable lengths, each representing a full spoken sentence (features), and the sentiment, our target, which varied between the values -3 to 3 (from negative to positive, 0 being neutral).
+- **Type of analysis**: Stacking machine learning models and deep learning models for speech sentiment analysis. For more details, please see our blog [@ medium](https://medium.com/@garetcorentin/speech-sentimental-analysis-backinthessr-adf433488845). 
 
 # Startup the project
 
